@@ -1,5 +1,3 @@
-import func POSIX.rename
-
 public struct File {
 
   public private(set) var path: String
@@ -9,7 +7,7 @@ public struct File {
   }
 
   public mutating func rename(newPath: String) throws {
-    try POSIX.rename(old: path, new: newPath)
+    try Maelstrom.rename(from: path, to: newPath)
     path = newPath
   }
 
