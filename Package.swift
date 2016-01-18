@@ -4,5 +4,7 @@ let package = Package(
   name: "Maelstrom",
   targets: [
     Target(name: "Maelstrom", dependencies: [.Target(name: "libc")]),
-    Target(name: "rename", dependencies: [.Target(name: "Maelstrom")]),
+    Target(name: "rename", dependencies: [
+      .Target(name: "util"),
+      .Target(name: "Maelstrom")]),
   ])
