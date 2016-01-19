@@ -1,12 +1,12 @@
-import libc
+import func libc.ferror
+import func libc.fread
+import var libc.errno
 
 internal class FileHandle: GeneratorType {
 
   // MARK: Initialisation
 
-  private typealias Handle = UnsafeMutablePointer<FILE>
-
-  private let handle: Handle
+  private let handle: FilePointer
   private let path: String
 
   private var buffer: [CChar]
@@ -15,13 +15,9 @@ internal class FileHandle: GeneratorType {
   init(_ path: String, bufferSize: Int = 1024) throws {
     precondition(bufferSize > 0)
 
-    self.handle = libc.fopen(path, "r")
+    self.handle = try fopen(path, "r")
     self.path = path
     self.buffer = Array(count: bufferSize, repeatedValue: 0)
-
-    if handle == nil {
-      throw SystemError.OpenError(libc.errno, path)
-    }
   }
 
   // MARK: Reading
