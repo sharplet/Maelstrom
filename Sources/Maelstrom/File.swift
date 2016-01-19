@@ -7,7 +7,7 @@ public struct File {
   }
 
   public func read() throws -> String {
-    let handle = try FileHandle(path)
+    let handle = try FileChunkGenerator(path)
     return try handle.read()
   }
 

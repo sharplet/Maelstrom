@@ -1,4 +1,4 @@
-internal class FileHandle: GeneratorType {
+internal class FileChunkGenerator: GeneratorType {
 
   // MARK: Initialisation
 
