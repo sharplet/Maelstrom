@@ -1,22 +1,16 @@
-import func libc.ferror
-import func libc.fread
-import var libc.errno
-
 internal class FileHandle: GeneratorType {
 
   // MARK: Initialisation
 
-  private let handle: FilePointer
-  private let path: String
+  private let file: FilePointer
 
   private var buffer: [CChar]
-  private var error: SystemError?
+  private var error: ErrorType?
 
   init(_ path: String, bufferSize: Int = 1024) throws {
     precondition(bufferSize > 0)
 
-    self.handle = try fopen(path, "r")
-    self.path = path
+    self.file = try FilePointer.open(path, "r")
     self.buffer = Array(count: bufferSize, repeatedValue: 0)
   }
 
@@ -37,16 +31,13 @@ internal class FileHandle: GeneratorType {
   typealias Element = ArraySlice<CChar>
 
   func next() -> ArraySlice<CChar>? {
-    let bytesRead = libc.fread(&buffer, sizeof(CChar.self), buffer.count, handle)
-
-    guard bytesRead > 0 else {
-      if libc.ferror(handle) > 0 {
-        error = SystemError.ReadError(libc.errno, path)
-      }
+    do {
+      let bytesRead = try file.read(&buffer)
+      return bytesRead > 0 ? buffer[0..<bytesRead] : nil
+    } catch {
+      self.error = error
       return nil
     }
-
-    return buffer[0..<bytesRead]
   }
 
 }
