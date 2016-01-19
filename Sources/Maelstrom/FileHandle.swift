@@ -4,19 +4,19 @@ import func libc.fopen
 import func libc.fread
 import var libc.errno
 
-internal final class FilePointer {
+internal final class FileHandle {
 
-  let pointer: UnsafeMutablePointer<FILE>
+  private let pointer: UnsafeMutablePointer<FILE>
   let path: String
 
-  static func open(path: String, _ mode: String) throws -> FilePointer {
+  static func open(path: String, _ mode: String) throws -> FileHandle {
     let pointer = libc.fopen(path, mode)
 
     guard pointer != nil else {
         throw SystemError.OpenError(libc.errno, path)
     }
 
-    return FilePointer(pointer, path)
+    return FileHandle(pointer, path)
   }
 
   private init(_ pointer: UnsafeMutablePointer<FILE>, _ path: String) {

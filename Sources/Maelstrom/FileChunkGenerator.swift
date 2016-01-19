@@ -2,7 +2,7 @@ internal class FileChunkGenerator: GeneratorType {
 
   // MARK: Initialisation
 
-  private let file: FilePointer
+  private let file: FileHandle
 
   private var buffer: [CChar]
   private var error: ErrorType?
@@ -10,7 +10,7 @@ internal class FileChunkGenerator: GeneratorType {
   init(_ path: String, bufferSize: Int = 1024) throws {
     precondition(bufferSize > 0)
 
-    self.file = try FilePointer.open(path, "r")
+    self.file = try FileHandle.open(path, "r")
     self.buffer = Array(count: bufferSize, repeatedValue: 0)
   }
 
