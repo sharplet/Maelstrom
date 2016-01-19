@@ -1,7 +1,7 @@
 default: run
 
 run: build
-	.build/debug/rename
+	.build/debug/read
 
 build:
 	swift build
