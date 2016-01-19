@@ -1,4 +1,5 @@
 import struct libc.FILE
+import func libc.clearerr
 import func libc.ferror
 import func libc.fopen
 import func libc.fread
@@ -28,6 +29,7 @@ internal final class FileHandle {
     let bytesRead = libc.fread(&buffer, sizeof(CChar.self), buffer.count, pointer)
 
     if bytesRead == 0, let error = error {
+      clearError()
       throw error
     }
 
@@ -40,6 +42,10 @@ internal final class FileHandle {
     } else {
       return nil
     }
+  }
+
+  private func clearError() {
+    libc.clearerr(pointer)
   }
 
 }
