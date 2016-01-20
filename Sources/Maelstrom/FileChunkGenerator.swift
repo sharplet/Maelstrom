@@ -1,4 +1,4 @@
-internal class FileChunkGenerator: GeneratorType {
+internal final class FileChunkGenerator: GeneratorType {
 
   // MARK: Initialisation
 
