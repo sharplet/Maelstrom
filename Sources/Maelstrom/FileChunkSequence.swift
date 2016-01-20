@@ -1,3 +1,17 @@
+internal struct FileChunkSequence: LazySequenceType {
+
+  let file: FileHandle
+
+  // MARK: SequenceType
+
+  typealias Generator = FileChunkGenerator
+
+  func generate() -> FileChunkGenerator {
+    return FileChunkGenerator(file)
+  }
+
+}
+
 internal final class FileChunkGenerator: GeneratorType {
 
   // MARK: Initialisation
@@ -10,14 +24,6 @@ internal final class FileChunkGenerator: GeneratorType {
 
     self.buffer = Array(count: chunkSize, repeatedValue: 0)
     self.file = file
-  }
-
-  // MARK: Reading
-
-  func read() throws -> String {
-    let bytes = GeneratorSequence(self).flatMap { $0 }
-    try file.validate()
-    return String.fromCString(bytes) ?? ""
   }
 
   // MARK: GeneratorType

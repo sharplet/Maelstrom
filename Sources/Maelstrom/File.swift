@@ -8,8 +8,10 @@ public struct File {
 
   public func read() throws -> String {
     let file = try FileHandle.open(path, "r")
-    let generator = FileChunkGenerator(file)
-    return try generator.read()
+    var bytes = Array(FileChunkSequence(file: file).flatten())
+    bytes.append(0)
+    try file.validate()
+    return String.fromCString(bytes) ?? ""
   }
 
   public mutating func rename(newPath: String) throws {
