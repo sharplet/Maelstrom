@@ -1,8 +1,9 @@
 import struct libc.FILE
-import func libc.clearerr
+import func libc.fclose
 import func libc.ferror
 import func libc.fopen
 import func libc.fread
+import var libc.EOF
 import var libc.errno
 
 internal final class FileHandle {
@@ -23,6 +24,12 @@ internal final class FileHandle {
   private init(_ pointer: UnsafeMutablePointer<FILE>, _ path: String) {
     self.pointer = pointer
     self.path = path
+  }
+
+  func close() throws {
+    if libc.fclose(pointer) == libc.EOF {
+      throw SystemError.CloseError(libc.errno, path)
+    }
   }
 
   func read(inout buffer: [CChar]) -> Int {

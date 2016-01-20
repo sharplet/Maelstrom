@@ -19,9 +19,14 @@ public struct File {
     do {
       let result = try body(file)
       try file.validate()
+      try file.close()
       return result
+    // if the error occurred closing the file, propagate it
+    } catch let SystemError.CloseError(errno, path) {
+      throw SystemError.CloseError(errno, path)
+    // otherwise, try to close the file before propagating the error
     } catch {
-      // TODO: try file.close()
+      try file.close()
       throw error
     }
   }

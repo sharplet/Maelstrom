@@ -3,12 +3,15 @@ import var libc.errno
 
 public enum SystemError: ErrorType, CustomStringConvertible {
 
+  case CloseError(Int32, String)
   case OpenError(Int32, String)
   case ReadError(Int32, String)
   case RenameError(Int32, String, String)
 
   public var description: String {
     switch self {
+    case let .CloseError(errno, path):
+      return "closing \"\(path)\": \(summary(errno))"
     case let .OpenError(errno, path):
       return "opening \"\(path)\": \(summary(errno))"
     case let .ReadError(errno, path):
