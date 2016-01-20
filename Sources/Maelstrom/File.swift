@@ -7,11 +7,23 @@ public struct File {
   }
 
   public func read() throws -> String {
+    return try open { file in
+      var bytes = Array(FileChunkSequence(file: file).flatten())
+      bytes.append(0)
+      return String.fromCString(bytes) ?? ""
+    }
+  }
+
+  internal func open<Result>(@noescape body: FileHandle throws -> Result) throws -> Result {
     let file = try FileHandle.open(path, "r")
-    var bytes = Array(FileChunkSequence(file: file).flatten())
-    bytes.append(0)
-    try file.validate()
-    return String.fromCString(bytes) ?? ""
+    do {
+      let result = try body(file)
+      try file.validate()
+      return result
+    } catch {
+      // TODO: try file.close()
+      throw error
+    }
   }
 
   public mutating func rename(newPath: String) throws {
