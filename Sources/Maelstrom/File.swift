@@ -7,8 +7,9 @@ public struct File {
   }
 
   public func read() throws -> String {
-    let handle = try FileChunkGenerator(path)
-    return try handle.read()
+    let file = try FileHandle.open(path, "r")
+    let generator = FileChunkGenerator(file)
+    return try generator.read()
   }
 
   public mutating func rename(newPath: String) throws {

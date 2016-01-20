@@ -25,27 +25,14 @@ internal final class FileHandle {
     self.path = path
   }
 
-  func read(inout buffer: [CChar]) throws -> Int {
-    let bytesRead = libc.fread(&buffer, sizeof(CChar.self), buffer.count, pointer)
-
-    if bytesRead == 0, let error = error {
-      clearError()
-      throw error
-    }
-
-    return bytesRead
+  func read(inout buffer: [CChar]) -> Int {
+    return libc.fread(&buffer, sizeof(CChar.self), buffer.count, pointer)
   }
 
-  var error: ErrorType? {
+  func validate() throws {
     if libc.ferror(pointer) > 0 {
-      return SystemError.ReadError(libc.errno, path)
-    } else {
-      return nil
+      throw SystemError.ReadError(libc.errno, path)
     }
-  }
-
-  private func clearError() {
-    libc.clearerr(pointer)
   }
 
 }
