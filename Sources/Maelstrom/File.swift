@@ -48,6 +48,16 @@ public struct File {
     }
   }
 
+  public func openForReadingAndWriting<Result>
+    (@noescape body: ReadWriteFile throws -> Result)
+    throws -> Result
+  {
+    return try open("r+") {
+      let file = ReadWriteFile($0)
+      return try body(file)
+    }
+  }
+
   internal func open<Result>
     (mode: String, @noescape body: FileHandle throws -> Result)
     throws -> Result
