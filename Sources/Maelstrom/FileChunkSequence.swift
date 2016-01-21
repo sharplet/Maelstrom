@@ -1,6 +1,6 @@
 internal struct FileChunkSequence: LazySequenceType {
 
-  let file: FileHandle
+  let file: Readable
 
   // MARK: SequenceType
 
@@ -17,9 +17,9 @@ internal final class FileChunkGenerator: GeneratorType {
   // MARK: Initialisation
 
   private var buffer: [CChar]
-  private let file: FileHandle
+  private let file: Readable
 
-  init(_ file: FileHandle, chunkSize: Int = 1024) {
+  init(_ file: Readable, chunkSize: Int = 1024) {
     precondition(chunkSize > 0)
 
     self.buffer = Array(count: chunkSize, repeatedValue: 0)

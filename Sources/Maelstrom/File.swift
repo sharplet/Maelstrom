@@ -7,11 +7,7 @@ public struct File {
   }
 
   public func read() throws -> String {
-    return try open { file in
-      var bytes = Array(FileChunkSequence(file: file.handle).flatten())
-      bytes.append(0)
-      return String.fromCString(bytes) ?? ""
-    }
+    return try open { $0.read() }
   }
 
   public func write(string: String) throws {

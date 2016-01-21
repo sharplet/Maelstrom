@@ -1,9 +1,3 @@
-// MARK: - Protocols
-
-public protocol Readable {
-  func read(inout buffer: [CChar]) -> Int
-}
-
 public protocol Seekable {
   func rewind()
   // TODO: Custom index for seeking?
