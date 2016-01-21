@@ -6,7 +6,7 @@ public struct File {
     self.path = path
   }
 
-  public func read() throws -> String {
+  public func read() throws -> String? {
     return try open { $0.read() }
   }
 
