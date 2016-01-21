@@ -26,7 +26,7 @@ public final class ReadOnlyFile: Readable, Seekable {
 
 }
 
-public final class WritableFile: Writable, Seekable {
+public final class WriteOnlyFile: Writable, Seekable {
 
   internal let handle: FileHandle
 
@@ -40,7 +40,7 @@ public final class WritableFile: Writable, Seekable {
 
 }
 
-public final class WriteOnlyFile: Writable {
+public final class AppendOnlyFile: Writable {
 
   internal let handle: FileHandle
 

@@ -33,21 +33,21 @@ public struct File {
   }
 
   public func openTruncatedForWriting<Result>
-    (@noescape body: WritableFile throws -> Result)
+    (@noescape body: WriteOnlyFile throws -> Result)
     throws -> Result
   {
     return try open("w") {
-      let file = WritableFile($0)
+      let file = WriteOnlyFile($0)
       return try body(file)
     }
   }
 
   public func openForAppending<Result>
-    (@noescape body: WriteOnlyFile throws -> Result)
+    (@noescape body: AppendOnlyFile throws -> Result)
     throws -> Result
   {
     return try open("a") {
-      let file = WriteOnlyFile($0)
+      let file = AppendOnlyFile($0)
       return try body(file)
     }
   }
