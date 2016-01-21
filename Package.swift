@@ -11,6 +11,9 @@ let package = Package(
     Target(name: "rename", dependencies: [
       .Target(name: "util"),
       .Target(name: "Maelstrom")]),
+    Target(name: "seek", dependencies: [
+      .Target(name: "util"),
+      .Target(name: "Maelstrom")]),
     Target(name: "write", dependencies: [
       .Target(name: "util"),
       .Target(name: "Maelstrom")]),

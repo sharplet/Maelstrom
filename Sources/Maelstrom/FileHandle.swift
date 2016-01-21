@@ -3,8 +3,10 @@ import func libc.fclose
 import func libc.ferror
 import func libc.fopen
 import func libc.fread
+import func libc.fseek
 import func libc.fwrite
 import var libc.EOF
+import var libc.SEEK_SET
 import var libc.errno
 
 internal final class FileHandle: Readable, Writable, Seekable {
@@ -41,6 +43,10 @@ internal final class FileHandle: Readable, Writable, Seekable {
     string.withCString { cstring in
       libc.fwrite(cstring, sizeof(CChar.self), string.utf8.count, pointer)
     }
+  }
+
+  func rewind() {
+    libc.fseek(pointer, 0, SEEK_SET)
   }
 
   func validate() throws {

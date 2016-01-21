@@ -5,6 +5,7 @@ public protocol Readable {
 }
 
 public protocol Seekable {
+  func rewind()
   // TODO: Custom index for seeking?
 }
 
@@ -24,6 +25,10 @@ public final class ReadOnlyFile: Readable, Seekable {
     return handle.read(&buffer)
   }
 
+  public func rewind() {
+    handle.rewind()
+  }
+
 }
 
 public final class WriteOnlyFile: Writable, Seekable {
@@ -36,6 +41,10 @@ public final class WriteOnlyFile: Writable, Seekable {
 
   public func write(string: String) {
     handle.write(string)
+  }
+
+  public func rewind() {
+    handle.rewind()
   }
 
 }
@@ -68,6 +77,10 @@ public final class ReadWriteFile: Readable, Writable, Seekable {
 
   public func write(string: String) {
     handle.write(string)
+  }
+
+  public func rewind() {
+    handle.rewind()
   }
 
 }
