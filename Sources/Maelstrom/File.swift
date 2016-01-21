@@ -7,15 +7,19 @@ public struct File {
   }
 
   public func read() throws -> String {
-    return try open { file in
+    return try open("r") { file in
       var bytes = Array(FileChunkSequence(file: file).flatten())
       bytes.append(0)
       return String.fromCString(bytes) ?? ""
     }
   }
 
-  internal func open<Result>(@noescape body: FileHandle throws -> Result) throws -> Result {
-    let file = try FileHandle.open(path, "r")
+  public func write(string: String) throws {
+    return try open("w") { $0.write(string) }
+  }
+
+  internal func open<Result>(mode: String, @noescape body: FileHandle throws -> Result) throws -> Result {
+    let file = try FileHandle.open(path, mode)
     do {
       let result = try body(file)
       try file.validate()
