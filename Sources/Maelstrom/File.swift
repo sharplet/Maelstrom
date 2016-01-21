@@ -7,18 +7,55 @@ public struct File {
   }
 
   public func read() throws -> String {
-    return try open("r") { file in
-      var bytes = Array(FileChunkSequence(file: file).flatten())
+    return try open { file in
+      var bytes = Array(FileChunkSequence(file: file.handle).flatten())
       bytes.append(0)
       return String.fromCString(bytes) ?? ""
     }
   }
 
   public func write(string: String) throws {
-    return try open("w") { $0.write(string) }
+    return try openTruncatedForWriting { $0.write(string) }
   }
 
-  internal func open<Result>(mode: String, @noescape body: FileHandle throws -> Result) throws -> Result {
+  public func append(string: String) throws {
+    return try openForAppending { $0.write(string) }
+  }
+
+  public func open<Result>
+    (@noescape body: ReadableFile throws -> Result)
+    throws -> Result
+  {
+    return try open("r") {
+      let file = ReadableFile($0)
+      return try body(file)
+    }
+  }
+
+  public func openTruncatedForWriting<Result>
+    (@noescape body: WritableFile throws -> Result)
+    throws -> Result
+  {
+    return try open("w") {
+      let file = WritableFile($0)
+      return try body(file)
+    }
+  }
+
+  public func openForAppending<Result>
+    (@noescape body: WriteOnlyFile throws -> Result)
+    throws -> Result
+  {
+    return try open("a") {
+      let file = WriteOnlyFile($0)
+      return try body(file)
+    }
+  }
+
+  internal func open<Result>
+    (mode: String, @noescape body: FileHandle throws -> Result)
+    throws -> Result
+  {
     let file = try FileHandle.open(path, mode)
     do {
       let result = try body(file)
