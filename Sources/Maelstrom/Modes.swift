@@ -12,7 +12,7 @@ typealias Writable = OutputStreamType
 
 // MARK: - File handle decorators
 
-public final class ReadableFile: Readable, Seekable {
+public final class ReadOnlyFile: Readable, Seekable {
 
   internal let handle: FileHandle
 

@@ -23,11 +23,11 @@ public struct File {
   }
 
   public func open<Result>
-    (@noescape body: ReadableFile throws -> Result)
+    (@noescape body: ReadOnlyFile throws -> Result)
     throws -> Result
   {
     return try open("r") {
-      let file = ReadableFile($0)
+      let file = ReadOnlyFile($0)
       return try body(file)
     }
   }
