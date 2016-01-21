@@ -49,10 +49,11 @@ public struct File {
   }
 
   public func openForReadingAndWriting<Result>
-    (@noescape body: ReadWriteFile throws -> Result)
+    (options options: ReadWriteOptions = .None,
+     @noescape body: ReadWriteFile throws -> Result)
     throws -> Result
   {
-    return try open("r+") {
+    return try open(options.mode) {
       let file = ReadWriteFile($0)
       return try body(file)
     }
