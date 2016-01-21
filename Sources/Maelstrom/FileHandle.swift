@@ -3,10 +3,9 @@ import func libc.fclose
 import func libc.ferror
 import func libc.fopen
 import func libc.fread
-import func libc.fseek
 import func libc.fwrite
+import func libc.rewind
 import var libc.EOF
-import var libc.SEEK_SET
 import var libc.errno
 
 internal final class FileHandle: Readable, Writable, Seekable {
@@ -46,7 +45,7 @@ internal final class FileHandle: Readable, Writable, Seekable {
   }
 
   func rewind() {
-    libc.fseek(pointer, 0, SEEK_SET)
+    libc.rewind(pointer)
   }
 
   func validate() throws {
