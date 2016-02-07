@@ -17,6 +17,8 @@ let package = Package(
     Target(name: "seek", dependencies: [
       .Target(name: "util"),
       .Target(name: "Maelstrom")]),
+    Target(name: "stdio", dependencies: [
+      .Target(name: "Maelstrom")]),
     Target(name: "write", dependencies: [
       .Target(name: "util"),
       .Target(name: "Maelstrom")]),

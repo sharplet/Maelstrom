@@ -23,7 +23,7 @@ internal final class FileHandle: Readable, Writable, Seekable {
     return FileHandle(pointer, path)
   }
 
-  private init(_ pointer: UnsafeMutablePointer<FILE>, _ path: String) {
+  init(_ pointer: UnsafeMutablePointer<FILE>, _ path: String) {
     self.pointer = pointer
     self.path = path
   }
