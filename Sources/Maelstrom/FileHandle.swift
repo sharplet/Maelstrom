@@ -3,10 +3,12 @@ import func libc.fclose
 import func libc.ferror
 import func libc.fopen
 import func libc.fread
+import func libc.fwrite
+import func libc.rewind
 import var libc.EOF
 import var libc.errno
 
-internal final class FileHandle {
+internal final class FileHandle: Readable, Writable, Seekable {
 
   private let pointer: UnsafeMutablePointer<FILE>
   let path: String
@@ -21,7 +23,7 @@ internal final class FileHandle {
     return FileHandle(pointer, path)
   }
 
-  private init(_ pointer: UnsafeMutablePointer<FILE>, _ path: String) {
+  init(_ pointer: UnsafeMutablePointer<FILE>, _ path: String) {
     self.pointer = pointer
     self.path = path
   }
@@ -34,6 +36,16 @@ internal final class FileHandle {
 
   func read(inout buffer: [CChar]) -> Int {
     return libc.fread(&buffer, sizeof(CChar.self), buffer.count, pointer)
+  }
+
+  func write(string: String) {
+    string.withCString { cstring in
+      libc.fwrite(cstring, sizeof(CChar.self), string.utf8.count, pointer)
+    }
+  }
+
+  func rewind() {
+    libc.rewind(pointer)
   }
 
   func validate() throws {
